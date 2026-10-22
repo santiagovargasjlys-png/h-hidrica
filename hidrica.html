@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cuidemos el Agua - Calculadora de Huella Hídrica</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f3fa',
+              100: '#e1e7f5',
+              500: '#6072bf',
+              600: '#4d5da3',
+              700: '#3c4885',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- ==================== HEADER & NAVEGACIÓN ==================== -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-2 text-xl font-bold text-brand-500">
+        <i class="fa-solid fa-droplet text-2xl"></i>
+        <span>Hidrica</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 font-medium text-sm">
+        <a href="#inicio" class="hover:text-brand-500 transition">Inicio</a>
+        <a href="#calculadora" class="hover:text-brand-500 transition">Calculadora</a>
+        <a href="#aprende" class="hover:text-brand-500 transition">Aprende</a>
+        <a href="#contacto" class="hover:text-brand-500 transition">Contacto</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <!-- Botón Modo Oscuro -->
+        <button id="themeToggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300">
+          <i class="fa-solid fa-moon text-lg dark:hidden"></i>
+          <i class="fa-solid fa-sun text-lg hidden dark:block text-amber-400"></i>
+        </button>
+
+        <!-- Botón Menú Móvil -->
+        <button id="mobileMenuBtn" class="md:hidden p-2 text-slate-600 dark:text-slate-300">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú Desplegable Móvil -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 space-y-2">
+      <a href="#inicio" class="block py-2 hover:text-brand-500">Inicio</a>
+      <a href="#calculadora" class="block py-2 hover:text-brand-500">Calculadora</a>
+      <a href="#aprende" class="block py-2 hover:text-brand-500">Aprende</a>
+      <a href="#contacto" class="block py-2 hover:text-brand-500">Contacto</a>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <!-- ==================== HÉROE / PANTALLA DE INICIO ==================== -->
+    <section id="inicio" class="relative min-h-[85vh] flex items-center justify-center text-center px-4 bg-cover bg-center rounded-3xl overflow-hidden my-4 max-w-6xl mx-auto shadow-2xl" 
+             style="background-image: linear-gradient(rgba(7, 25, 82, 0.75), rgba(7, 25, 82, 0.85)), url('1792611629773.png')
+">
+      
+      <div class="max-w-2xl text-white py-12 px-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold uppercase tracking-wider mb-8 text-sky-200 border border-white/20">
+          <i class="fa-solid fa-droplet text-sky-400"></i> Huella hídrica 
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6 leading-tight">
+          ¿Conoces cuál es la <br/>
+          <span class="text-sky-300">Huella Hídrica</span> que generas?
+        </h1>
+
+        <p class="text-lg sm:text-xl text-slate-200 font-medium mb-6">
+          Calcula para descubrir cómo puedes ayudar plantel estudiantil Gabino Barreda.
+        </p>
+
+        <p class="text-sm sm:text-base text-slate-300 mb-10 max-w-lg mx-auto">
+          A continuación te haremos una serie de preguntas que nos ayudarán a calcular tu Huella Hídrica.
+        </p>
+
+        <a href="#calculadora" class="inline-block w-full sm:w-auto px-12 py-4 bg-sky-500 hover:bg-sky-400 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-sky-500/50 transition-all duration-300 transform hover:-translate-y-0.5">
+          Empezar
+        </a>
+      </div>
+    </section>
+
+    <!-- ==================== CALCULADORA ESTILO AQUAE ==================== -->
+    <section id="calculadora" class="py-16 px-4 bg-cover bg-center relative" 
+             style="background-image: linear-gradient(to bottom, rgba(3, 15, 48, 0.85), rgba(7, 25, 82, 0.92)), url('1792611629773.png')
+>
+      
+      <div class="max-w-xl mx-auto">
+        <!-- Tarjeta tipo Vidrio (Glassmorphism) -->
+        <div class="bg-sky-950/60 backdrop-blur-md border border-white/10 rounded-3xl p-6 sm:p-10 shadow-2xl text-white text-center">
+          
+          <h2 class="text-4xl sm:text-5xl font-light tracking-wide mb-8 text-sky-100 font-sans">
+            Vivienda
+          </h2>
+
+          <form id="waterCalculator" class="space-y-8">
+            
+            <!-- Pregunta 1: Duchas -->
+            <div class="space-y-3">
+              <p class="text-base sm:text-lg font-medium text-slate-100">
+                ¿Cuántos minutos tardas en ducharte?
+              </p>
+              <div class="flex items-center justify-center gap-6">
+                <i class="fa-solid fa-shower text-3xl sm:text-4xl text-white"></i>
+                <span id="valDucha" class="text-3xl font-bold w-10 text-center">9</span>
+                <input type="hidden" id="ducha" value="9" />
+                <div class="flex items-center gap-4">
+                  <button type="button" onclick="cambiarValor('ducha', -1)" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-2xl font-bold text-white transition flex items-center justify-center select-none">–</button>
+                  <button type="button" onclick="cambiarValor('ducha', 1)" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-2xl font-bold text-white transition flex items-center justify-center select-none">+</button>
+                </div>
+              </div>
+            </div>
+
+            <hr class="border-white/10 my-4" />
+
+            <!-- Pregunta 2: Grifo Baño -->
+            <div class="space-y-3">
+              <p class="text-base sm:text-lg font-medium text-slate-100">
+                ¿Cuántos minutos dejas abierto el grifo del baño?
+              </p>
+              <div class="flex items-center justify-center gap-6">
+                <i class="fa-solid fa-faucet-drip text-3xl sm:text-4xl text-white"></i>
+                <span id="valGrifo" class="text-3xl font-bold w-10 text-center">1</span>
+                <input type="hidden" id="grifo" value="1" />
+                <div class="flex items-center gap-4">
+                  <button type="button" onclick="cambiarValor('grifo', -1)" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-2xl font-bold text-white transition flex items-center justify-center select-none">–</button>
+                  <button type="button" onclick="cambiarValor('grifo', 1)" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-2xl font-bold text-white transition flex items-center justify-center select-none">+</button>
+                </div>
+              </div>
+            </div>
+
+            <hr class="border-white/10 my-4" />
+
+            <!-- Pregunta 3: Grifo Cocina -->
+            <div class="space-y-3">
+              <p class="text-base sm:text-lg font-medium text-slate-100">
+                ¿Cuántos minutos dejas abierto el grifo de la cocina?
+              </p>
+              <div class="flex items-center justify-center gap-6">
+                <i class="fa-solid fa-sink text-3xl sm:text-4xl text-white"></i>
+                <span id="valCocina" class="text-3xl font-bold w-10 text-center">1</span>
+                <input type="hidden" id="cocina" value="1" />
+                <div class="flex items-center gap-4">
+                  <button type="button" onclick="cambiarValor('cocina', -1)" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-2xl font-bold text-white transition flex items-center justify-center select-none">–</button>
+                  <button type="button" onclick="cambiarValor('cocina', 1)" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-2xl font-bold text-white transition flex items-center justify-center select-none">+</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botón Siguiente / Calcular (Cuadrado Azul con Flecha) -->
+            <div class="pt-6">
+              <button type="submit" class="w-14 h-14 bg-sky-500 hover:bg-sky-400 active:scale-95 text-white rounded-xl shadow-lg inline-flex items-center justify-center transition-all duration-300">
+                <i class="fa-solid fa-chevron-right text-xl"></i>
+              </button>
+            </div>
+
+          </form>
+
+          <!-- Tarjeta de Resultado -->
+          <div id="resultCard" class="hidden mt-8 p-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl text-center">
+            <h3 class="text-lg font-semibold text-slate-200 mb-2">Tu consumo estimado es de:</h3>
+            <p class="text-4xl font-extrabold text-sky-300 my-2" id="litrosTotales">0 Litros/día</p>
+            <p id="consejoResultado" class="text-sm text-slate-200 mt-3"></p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== APRENDE / TARJETAS ==================== -->
+    <section id="aprende" class="py-16 px-4 max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">¿Qué es el Agua Virtual?</h2>
+        <p class="text-slate-600 dark:text-slate-400 mt-2">Haz clic en las tarjetas para descubrir más:</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="fact-card bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer shadow-sm hover:shadow-md transition" onclick="toggleFact(this)">
+          <div class="text-brand-500 text-3xl mb-3"><i class="fa-solid fa-mug-hot"></i></div>
+          <h3 class="font-bold text-lg mb-1">1 Taza de Café</h3>
+          <p class="text-2xl font-black text-slate-700 dark:text-slate-200">140 Litros</p>
+          <div class="fact-details hidden mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
+            Incluye el agua usada para cultivar y procesar los granos de café.
+          </div>
+        </div>
+
+        <div class="fact-card bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer shadow-sm hover:shadow-md transition" onclick="toggleFact(this)">
+          <div class="text-brand-500 text-3xl mb-3"><i class="fa-solid fa-hamburger"></i></div>
+          <h3 class="font-bold text-lg mb-1">1 Hamburguesa</h3>
+          <p class="text-2xl font-black text-slate-700 dark:text-slate-200">2,400 Litros</p>
+          <div class="fact-details hidden mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
+            Gran parte del agua se utiliza para cultivar el alimento del ganado.
+          </div>
+        </div>
+
+        <div class="fact-card bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer shadow-sm hover:shadow-md transition" onclick="toggleFact(this)">
+          <div class="text-brand-500 text-3xl mb-3"><i class="fa-solid fa-shirt"></i></div>
+          <h3 class="font-bold text-lg mb-1">1 Camiseta</h3>
+          <p class="text-2xl font-black text-slate-700 dark:text-slate-200">2,700 Litros</p>
+          <div class="fact-details hidden mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
+            El cultivo y tratamiento del algodón requiere mucha agua.
+          </div>
+        </div>
+
+        <div class="fact-card bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer shadow-sm hover:shadow-md transition" onclick="toggleFact(this)">
+          <div class="text-brand-500 text-3xl mb-3"><i class="fa-solid fa-bottle-water"></i></div>
+          <h3 class="font-bold text-lg mb-1">1 Botella de Agua</h3>
+          <p class="text-2xl font-black text-slate-700 dark:text-slate-200">3 Litros</p>
+          <div class="fact-details hidden mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
+            Fabricar el envase de plástico consume más agua que el líquido interior.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FORMULARIO DE GOOGLE (CONTACTO) ==================== -->
+    <section id="contacto" class="py-16 bg-slate-100 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 px-4">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Formulario de Contacto</h2>
+        <p class="text-slate-600 dark:text-slate-400 mb-8">Déjanos tus comentarios o preguntas completando el formulario a continuación:</p>
+
+        <!-- Google Form en Iframe -->
+        <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-xl overflow-hidden p-2">
+          <iframe 
+            src="https://docs.google.com/forms/d/e/1FAIpQLScSF7pDInWcENSqiUIE_RpZ51LX5qMQ0WhlkiTVcHv0m3_fFA/viewform?embedded=true" 
+            width="100%" 
+            height="700" 
+            frameborder="0" 
+            marginheight="0" 
+            marginwidth="0"
+            class="w-full rounded-xl">
+            Cargando formulario…
+          </iframe>
+        </div>
+
+        <!-- Botón alternativo de apertura -->
+        <div class="mt-6">
+          <p class="text-xs text-slate-500 dark:text-slate-400 mb-2">¿Tienes inconvenientes para visualizar el formulario desde tu dispositivo?</p>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLScSF7pDInWcENSqiUIE_RpZ51LX5qMQ0WhlkiTVcHv0m3_fFA/viewform?usp=header" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-500 hover:bg-brand-600 text-white font-medium text-sm rounded-lg shadow transition">
+            Abrir Formulario en otra pestaña
+            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-slate-900 text-slate-400 py-8 px-4 border-t border-slate-800 text-center text-sm">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p>© 2026 GotaAGota - Proyecto Educativo Ambiental.</p>
+      <div class="flex gap-4 text-lg">
+        <a href="#contacto" class="hover:text-white transition">Contacto</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // Cambio de tema claro / oscuro
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const htmlElement = document.documentElement;
+
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      htmlElement.classList.add('dark');
+    } else {
+      htmlElement.classList.remove('dark');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      htmlElement.classList.toggle('dark');
+      localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
+    });
+
+    // Menú desplegable móvil
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Función para sumar / restar el valor en la calculadora
+    function cambiarValor(campo, cambio) {
+      const inputHidden = document.getElementById(campo);
+      const spanText = document.getElementById('val' + campo.charAt(0).toUpperCase() + campo.slice(1));
+      
+      let valor = parseInt(inputHidden.value) || 0;
+      valor += cambio;
+
+      if (valor < 0) valor = 0; // Evitar valores negativos
+
+      inputHidden.value = valor;
+      spanText.textContent = valor;
+    }
+
+    // Cálculo dinámico del total de agua
+    document.getElementById('waterCalculator').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const ducha = parseFloat(document.getElementById('ducha').value) || 0;
+      const grifo = parseFloat(document.getElementById('grifo').value) || 0;
+      const cocina = parseFloat(document.getElementById('cocina').value) || 0;
+
+      // Cálculos por hábito
+      const aguaDucha = ducha * 12; // 12 litros por min
+      const aguaGrifo = grifo * 6;  // 6 litros por min
+      const aguaCocina = cocina * 8; // 8 litros por min
+      const baseAlimentacionYAgua = 2400; // consumo base diario aproximado
+
+      const totalLitros = Math.round(aguaDucha + aguaGrifo + aguaCocina + baseAlimentacionYAgua);
+      
+      const resultCard = document.getElementById('resultCard');
+      document.getElementById('litrosTotales').textContent = `${totalLitros.toLocaleString()} Litros / día`;
+
+      if (totalLitros > 2600) {
+        document.getElementById('consejoResultado').textContent = "Tu consumo está por encima del promedio recomendando. Intenta reducir el tiempo en la ducha.";
+      } else {
+        document.getElementById('consejoResultado').textContent = "¡Excelente! Mantienes un consumo bastante responsable de agua.";
+      }
+
+      resultCard.classList.remove('hidden');
+      resultCard.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Desplegar tarjetas educativas
+    function toggleFact(cardElement) {
+      cardElement.querySelector('.fact-details').classList.toggle('hidden');
+    }
+  </script>
+</body>
+</html>Léon 
