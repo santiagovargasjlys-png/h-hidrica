@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cuidemos el Agua - Calculadora de Huella Hídrica</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f3fa',
+              100: '#e1e7f5',
+              500: '#6072bf',
+              600: '#4d5da3',
+              700: '#3c4885',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans antialiased min-h-screen flex flex-col justify-between">
+
+  <!-- ==================== HEADER & NAVEGACIÓN ==================== -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-2 text-xl font-bold text-brand-500">
+        <i class="fa-solid fa-droplet text-2xl"></i>
+        <span>Hidrica</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-6 font-medium text-sm">
+        <a href="#inicio" class="hover:text-brand-500 transition">Inicio</a>
+        <a href="#calculadora" class="hover:text-brand-500 transition">Calculadora</a>
+        <a href="#aprende" class="hover:text-brand-500 transition">Aprende</a>
+        <a href="#contacto" class="hover:text-brand-500 transition">Contacto</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <!-- Botón Modo Oscuro -->
+        <button id="themeToggle" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition text-slate-600 dark:text-slate-300">
+          <i class="fa-solid fa-moon text-lg dark:hidden"></i>
+          <i class="fa-solid fa-sun text-lg hidden dark:block text-amber-400"></i>
+        </button>
+
+        <!-- Botón Menú Móvil -->
+        <button id="mobileMenuBtn" class="md:hidden p-2 text-slate-600 dark:text-slate-300">
+          <i class="fa-solid fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú Desplegable Móvil -->
+    <div id="mobileMenu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 space-y-2">
+      <a href="#inicio" class="block py-2 hover:text-brand-500">Inicio</a>
+      <a href="#calculadora" class="block py-2 hover:text-brand-500">Calculadora</a>
+      <a href="#aprende" class="block py-2 hover:text-brand-500">Aprende</a>
+      <a href="#contacto" class="block py-2 hover:text-brand-500">Contacto</a>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    <!-- ==================== HÉROE / PANTALLA DE INICIO ==================== -->
+     <section id="vistaInicio" class="relative min-h-[85vh] flex items-center justify-center text-center px-4 bg-cover bg-center bg-no-repeat rounded-3xl overflow-hidden my-4 max-w-6xl mx-auto shadow-2xl" 
+             style="background-image: linear-gradient(rgba(7, 25, 82, 0.45), rgba(7, 25, 82, 0.55)), url('1792611629773.png');">
+
+      
+      <div class="max-w-2xl text-white py-12 px-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 backdrop-blur-md rounded-full text-xs font-semibold uppercase tracking-wider mb-8 text-sky-200 border border-white/20">
+          <i class="fa-solid fa-droplet text-sky-400"></i> Huella hídrica 
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6 leading-tight">
+          ¿Conoces cuál es la <br/>
+          <span class="text-sky-300">Huella Hídrica</span> que generas?
+        </h1>
+
+       <p class="text-lg sm:text-xl text-slate-200 font-medium mb-6">
+          Calcula para descubrir cómo puedes ayudar al plantel estudiantil Gabino Barreda.
+        </p>
+
+        <p class="text-sm sm:text-base text-slate-300 mb-10 max-w-lg mx-auto">
+          A continuación responde preguntas sobre tus hábitos diarios, consumo de agua, alimentación y uso de tecnología.
+        </p>
+
+        <!-- Botón Empezar -->
+        <button onclick="mostrarCalculadora()" class="inline-block w-full sm:w-auto px-12 py-4 bg-sky-500 hover:bg-sky-400 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-sky-500/50 transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer">
+          Empezar Encuesta
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== PREGUNTAS DE ENCUESTA (35 EN TOTAL) ==================== -->
+    <section id="vistaCalculadora" class="hidden py-10 px-4 bg-cover bg-center relative min-h-[85vh] flex items-center justify-center" 
+             style="background-image: linear-gradient(to bottom, rgba(3, 15, 48, 0.85), rgba(7, 25, 82, 0.92)), url('1792611629773.png')">
+      
+      <div class="max-w-xl mx-auto w-full">
+        <!-- Tarjeta tipo Vidrio -->
+        <div class="bg-sky-950/60 backdrop-blur-md border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl text-white">
+          
+          <!-- Indicador de Progreso -->
+          <div class="mb-6 flex items-center justify-between border-b border-white/10 pb-3">
+            <span class="text-xs uppercase tracking-wider text-sky-300 font-semibold" id="indicadorPregunta">Pregunta 1 de 35</span>
+            <div class="w-32 bg-white/10 rounded-full h-2 overflow-hidden">
+              <div id="barraProgreso" class="bg-sky-400 h-full transition-all duration-300" style="width: 3.22%;"></div>
+            </div>
+          </div>
+
+          <!-- P1 -->
+          <div id="paso1">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">1_¿Cuántos minutos tardas aproximadamente en bañarte al día? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-shower text-6xl mb-2"></i></div>
+            <form id="formPaso1" class="space-y-3" onsubmit="siguientePaso(event, 2)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiempo_baño" value="2.5" class="w-5 h-5 accent-sky-400" required /> De 0 a 5 minutos</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiempo_baño" value="8" class="w-5 h-5 accent-sky-400" /> De 6 a 10 minutos</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiempo_baño" value="13" class="w-5 h-5 accent-sky-400" /> De 11 a 15 minutos</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiempo_baño" value="18" class="w-5 h-5 accent-sky-400" /> De 16 a 20 minutos</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiempo_baño" value="25" class="w-5 h-5 accent-sky-400" /> Más de 20 minutos</label>
+              <div class="pt-4 text-right"><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P2 -->
+          <div id="paso2" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">2_¿Cuántas veces al día te bañas? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-bath text-6xl mb-2"></i></div>
+            <form id="formPaso2" class="space-y-3" onsubmit="siguientePaso(event, 3)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_baño" value="1" class="w-5 h-5 accent-sky-400" required /> 1 vez al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_baño" value="2" class="w-5 h-5 accent-sky-400" /> 2 veces al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_baño" value="3" class="w-5 h-5 accent-sky-400" /> 3 veces al día</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 1)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P3 -->
+          <div id="paso3" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">3_¿Cierras la llave mientras te enjabonas en la ducha? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-circle-stop text-6xl mb-2"></i></div>
+            <form id="formPaso3" class="space-y-3" onsubmit="siguientePaso(event, 4)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="cierra_ducha" value="si" class="w-5 h-5 accent-sky-400" required /> Siempre</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="cierra_ducha" value="a_veces" class="w-5 h-5 accent-sky-400" /> A veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="cierra_ducha" value="no" class="w-5 h-5 accent-sky-400" /> Nunca</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 2)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P4 -->
+          <div id="paso4" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">4_¿Cuántas veces te lavas las manos al día? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-hands-bubbles text-6xl mb-2"></i></div>
+            <form id="formPaso4" class="space-y-3" onsubmit="siguientePaso(event, 5)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="lavado_manos" value="3" class="w-5 h-5 accent-sky-400" required /> De 2 a 4 veces al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="lavado_manos" value="6" class="w-5 h-5 accent-sky-400" /> De 5 a 7 veces al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="lavado_manos" value="9" class="w-5 h-5 accent-sky-400" /> De 8 a 10 veces al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="lavado_manos" value="12" class="w-5 h-5 accent-sky-400" /> Más de 10 veces al día</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 3)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P5 -->
+          <div id="paso5" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">5_¿Por cuánto tiempo dejás abierto el grifo al día? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-faucet-drip text-6xl mb-2"></i></div>
+            <form id="formPaso5" class="space-y-3" onsubmit="siguientePaso(event, 6)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiempo_grifo" value="12.5" class="w-5 h-5 accent-sky-400" required /> De 10 a 15 segundos</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiempo_grifo" value="18" class="w-5 h-5 accent-sky-400" /> De 16 a 20 segundos</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiempo_grifo" value="23" class="w-5 h-5 accent-sky-400" /> De 21 a 25 segundos</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiempo_grifo" value="28" class="w-5 h-5 accent-sky-400" /> De 26 a 30 segundos</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiempo_grifo" value="35" class="w-5 h-5 accent-sky-400" /> Más de 30 segundos</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 4)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P6 -->
+          <div id="paso6" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">6_¿Tienes lavadora? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-soap text-6xl mb-2"></i></div>
+            <form id="formPaso6" class="space-y-3" onsubmit="procesarPaso6(event)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiene_lavadora" value="si" class="w-5 h-5 accent-sky-400" required /> Si</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiene_lavadora" value="no" class="w-5 h-5 accent-sky-400" /> No</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 5)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P7 -->
+          <div id="paso7" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">7_¿Cuántas veces por semana utilizas la lavadora en tu casa? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-rotate-right text-6xl mb-2"></i></div>
+            <form id="formPaso7" class="space-y-3" onsubmit="siguientePaso(event, 8)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_lavadora" value="1.5" class="w-5 h-5 accent-sky-400" required /> De 1 a 2 veces a la semana</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_lavadora" value="3.5" class="w-5 h-5 accent-sky-400" /> De 3 a 4 veces a la semana</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_lavadora" value="5.5" class="w-5 h-5 accent-sky-400" /> De 5 a 6 veces a la semana</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_lavadora" value="7" class="w-5 h-5 accent-sky-400" /> Más de 6 veces a la semana</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 6)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P8 -->
+          <div id="paso8" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">8_¿Aproximadamente cuántas cargas de ropa realiza tu familia por semana? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-shirt text-6xl mb-2"></i></div>
+            <form id="formPaso8" class="space-y-3" onsubmit="siguientePaso(event, 9)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="cargas_ropa" value="1.5" class="w-5 h-5 accent-sky-400" required /> De 1 a 2 cargas</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="cargas_ropa" value="2.5" class="w-5 h-5 accent-sky-400" /> De 2 a 3 cargas</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="cargas_ropa" value="4.5" class="w-5 h-5 accent-sky-400" /> De 4 a 5 cargas</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="cargas_ropa" value="6.5" class="w-5 h-5 accent-sky-400" /> De 6 a 7 cargas</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="cargas_ropa" value="8" class="w-5 h-5 accent-sky-400" /> Más de 7 cargas</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 7)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P9 -->
+          <div id="paso9" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">9_¿Cómo te lavas los dientes habitualmente? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-tooth text-6xl mb-2"></i></div>
+            <form id="formPaso9" class="space-y-3" onsubmit="siguientePaso(event, 10)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="lavado_dientes" value="vaso" class="w-5 h-5 accent-sky-400" required /> Usando un vaso con agua</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="lavado_dientes" value="abierta" class="w-5 h-5 accent-sky-400" /> Con la llave abierta todo el tiempo</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="lavado_dientes" value="abre_cierra" class="w-5 h-5 accent-sky-400" /> Abriendo la llave solo para enjuagar</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 8)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P10 -->
+          <div id="paso10" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">10_¿Cómo lavan los trastes en tu casa? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-kitchen-set text-6xl mb-2"></i></div>
+            <form id="formPaso10" class="space-y-3" onsubmit="siguientePaso(event, 11)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="lavado_trastes" value="tina" class="w-5 h-5 accent-sky-400" required /> Llenando una tina/fregadero</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="lavado_trastes" value="abierta" class="w-5 h-5 accent-sky-400" /> Con la llave abierta todo el tiempo</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="lavado_trastes" value="lavavajillas" class="w-5 h-5 accent-sky-400" /> Con máquina lavavajillas</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 9)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P11 -->
+          <div id="paso11" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">11_¿Cuántas veces comes pollo al mes? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-drumstick-bite text-6xl mb-2"></i></div>
+            <form id="formPaso11" class="space-y-3" onsubmit="siguientePaso(event, 12)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="pollo_mes" value="1" class="w-5 h-5 accent-sky-400" required /> 1 vez al mes</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="pollo_mes" value="2.5" class="w-5 h-5 accent-sky-400" /> De 2 a 3 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="pollo_mes" value="4.5" class="w-5 h-5 accent-sky-400" /> De 4 a 5 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="pollo_mes" value="6.5" class="w-5 h-5 accent-sky-400" /> De 6 a 7 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="pollo_mes" value="0" class="w-5 h-5 accent-sky-400" /> Nunca</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 10)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P12 -->
+          <div id="paso12" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">12_¿Cuántas veces comes pescado o mariscos al mes? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-fish text-6xl mb-2"></i></div>
+            <form id="formPaso12" class="space-y-3" onsubmit="siguientePaso(event, 13)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="pescado_mes" value="1" class="w-5 h-5 accent-sky-400" required /> 1 vez al mes</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="pescado_mes" value="2.5" class="w-5 h-5 accent-sky-400" /> De 2 a 3 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="pescado_mes" value="4.5" class="w-5 h-5 accent-sky-400" /> De 4 a 5 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="pescado_mes" value="6.5" class="w-5 h-5 accent-sky-400" /> De 6 a 7 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="pescado_mes" value="0" class="w-5 h-5 accent-sky-400" /> Nunca</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 11)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P13 -->
+          <div id="paso13" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">13_¿Cuántos litros de leche consumes aproximadamente por semana? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-glass-water text-6xl mb-2"></i></div>
+            <form id="formPaso13" class="space-y-3" onsubmit="siguientePaso(event, 14)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="litros_leche" value="1.5" class="w-5 h-5 accent-sky-400" required /> De 1 a 2 litros</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="litros_leche" value="3.5" class="w-5 h-5 accent-sky-400" /> De 3 a 4 litros</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="litros_leche" value="5.5" class="w-5 h-5 accent-sky-400" /> De 5 a 6 litros</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="litros_leche" value="7.5" class="w-5 h-5 accent-sky-400" /> De 7 a 8 litros</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="litros_leche" value="0" class="w-5 h-5 accent-sky-400" /> Nunca</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 12)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P14 -->
+          <div id="paso14" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">14_¿Cuántas veces consumes carne de res al mes? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-cow text-6xl mb-2"></i></div>
+            <form id="formPaso14" class="space-y-3" onsubmit="siguientePaso(event, 15)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="carne_res_mes" value="1" class="w-5 h-5 accent-sky-400" required /> 1 vez al mes</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="carne_res_mes" value="2.5" class="w-5 h-5 accent-sky-400" /> De 2 a 3 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="carne_res_mes" value="5" class="w-5 h-5 accent-sky-400" /> De 4 a 6 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="carne_res_mes" value="8" class="w-5 h-5 accent-sky-400" /> Más de 6 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="carne_res_mes" value="0" class="w-5 h-5 accent-sky-400" /> Nunca</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 13)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P15 -->
+          <div id="paso15" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">15_¿Cuántos días a la semana consumes frutas? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-apple-whole text-6xl mb-2"></i></div>
+            <form id="formPaso15" class="space-y-3" onsubmit="siguientePaso(event, 16)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_frutas" value="1.5" class="w-5 h-5 accent-sky-400" required /> De 1 a 2 días</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_frutas" value="3.5" class="w-5 h-5 accent-sky-400" /> De 3 a 4 días</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_frutas" value="5.5" class="w-5 h-5 accent-sky-400" /> De 5 a 6 días</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_frutas" value="7" class="w-5 h-5 accent-sky-400" /> Todos los días</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 14)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P16 -->
+          <div id="paso16" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">16_¿Cuántas porciones de fruta consumes al día? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-lemon text-6xl mb-2"></i></div>
+            <form id="formPaso16" class="space-y-3" onsubmit="siguientePaso(event, 17)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_fruta" value="1" class="w-5 h-5 accent-sky-400" required /> 1 porción al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_fruta" value="2" class="w-5 h-5 accent-sky-400" /> 2 porciones al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_fruta" value="3" class="w-5 h-5 accent-sky-400" /> 3 porciones al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_fruta" value="4" class="w-5 h-5 accent-sky-400" /> Más de 3 porciones al día</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 15)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P17 -->
+          <div id="paso17" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">17_¿Cuántos días a la semana consumes verduras? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-carrot text-6xl mb-2"></i></div>
+            <form id="formPaso17" class="space-y-3" onsubmit="siguientePaso(event, 18)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_verduras" value="1.5" class="w-5 h-5 accent-sky-400" required /> De 1 a 2 días</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_verduras" value="3.5" class="w-5 h-5 accent-sky-400" /> De 3 a 4 días</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_verduras" value="5.5" class="w-5 h-5 accent-sky-400" /> De 5 a 6 días</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_verduras" value="7" class="w-5 h-5 accent-sky-400" /> Toda la semana</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 16)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P18 -->
+          <div id="paso18" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">18_¿Cuántas porciones de verduras consumes al día? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-seedling text-6xl mb-2"></i></div>
+            <form id="formPaso18" class="space-y-3" onsubmit="siguientePaso(event, 19)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_verduras" value="1" class="w-5 h-5 accent-sky-400" required /> 1 porción al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_verduras" value="2" class="w-5 h-5 accent-sky-400" /> 2 porciones al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_verduras" value="3" class="w-5 h-5 accent-sky-400" /> 3 porciones al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_verduras" value="4" class="w-5 h-5 accent-sky-400" /> Más de 3 porciones al día</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 17)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P19 -->
+          <div id="paso19" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">19_¿Cuántos días a la semana consumes legumbres? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-bowl-food text-6xl mb-2"></i></div>
+            <form id="formPaso19" class="space-y-3" onsubmit="siguientePaso(event, 20)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_legumbres" value="1.5" class="w-5 h-5 accent-sky-400" required /> De 1 a 2 días</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_legumbres" value="3.5" class="w-5 h-5 accent-sky-400" /> De 3 a 4 días</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_legumbres" value="5.5" class="w-5 h-5 accent-sky-400" /> De 5 a 6 días</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="dias_legumbres" value="7" class="w-5 h-5 accent-sky-400" /> Toda la semana</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 18)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P20 -->
+          <div id="paso20" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">20_¿Cuántas porciones de legumbres consumes al día? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-utensils text-6xl mb-2"></i></div>
+            <form id="formPaso20" class="space-y-3" onsubmit="siguientePaso(event, 21)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_legumbres" value="1" class="w-5 h-5 accent-sky-400" required /> 1 porción al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_legumbres" value="2" class="w-5 h-5 accent-sky-400" /> 2 porciones al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_legumbres" value="3" class="w-5 h-5 accent-sky-400" /> 3 porciones al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="porciones_legumbres" value="4" class="w-5 h-5 accent-sky-400" /> Más de 3 porciones al día</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 19)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P21 -->
+          <div id="paso21" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">21_¿Con qué frecuencia consumes huevos en tu dieta? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-egg text-6xl mb-2"></i></div>
+            <form id="formPaso21" class="space-y-3" onsubmit="siguientePaso(event, 22)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_huevos" value="2" class="w-5 h-5 accent-sky-400" required /> De 1 a 2 veces por semana</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_huevos" value="4" class="w-5 h-5 accent-sky-400" /> De 3 a 5 veces por semana</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_huevos" value="7" class="w-5 h-5 accent-sky-400" /> Diario</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="frecuencia_huevos" value="0" class="w-5 h-5 accent-sky-400" /> Nunca</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 20)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P22 -->
+          <div id="paso22" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">22_¿Cuántas bebidas embotelladas consumes al día? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-bottle-water text-6xl mb-2"></i></div>
+            <form id="formPaso22" class="space-y-3" onsubmit="siguientePaso(event, 23)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="bebidas_embotelladas" value="1.5" class="w-5 h-5 accent-sky-400" required /> De 1 a 2 al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="bebidas_embotelladas" value="2.5" class="w-5 h-5 accent-sky-400" /> De 2 a 3 al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="bebidas_embotelladas" value="3.5" class="w-5 h-5 accent-sky-400" /> De 3 a 4 al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="bebidas_embotelladas" value="5" class="w-5 h-5 accent-sky-400" /> Más de 4 al día</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="bebidas_embotelladas" value="0" class="w-5 h-5 accent-sky-400" /> Nunca</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 21)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P23 -->
+          <div id="paso23" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">23_¿Cuántas prendas nuevas comprás aproximadamente al mes? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-bag-shopping text-6xl mb-2"></i></div>
+            <form id="formPaso23" class="space-y-3" onsubmit="siguientePaso(event, 24)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="prendas_nuevas" value="0" class="w-5 h-5 accent-sky-400" required /> 0</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="prendas_nuevas" value="1.5" class="w-5 h-5 accent-sky-400" /> De 1 a 2 prendas al mes</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="prendas_nuevas" value="3.5" class="w-5 h-5 accent-sky-400" /> De 3 a 4 prendas al mes</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="prendas_nuevas" value="5.5" class="w-5 h-5 accent-sky-400" /> De 5 a 6 prendas al mes</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="prendas_nuevas" value="7" class="w-5 h-5 accent-sky-400" /> Más de 6 prendas al mes</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 22)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P24 -->
+          <div id="paso24" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">24_¿Cuántas veces a la semana consumes comida rápida? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-burger text-6xl mb-2"></i></div>
+            <form id="formPaso24" class="space-y-3" onsubmit="siguientePaso(event, 25)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="comida_rapida" value="1" class="w-5 h-5 accent-sky-400" required /> 1 vez a la semana</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="comida_rapida" value="2.5" class="w-5 h-5 accent-sky-400" /> De 2 a 3 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="comida_rapida" value="4.5" class="w-5 h-5 accent-sky-400" /> De 4 a 5 veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="comida_rapida" value="6" class="w-5 h-5 accent-sky-400" /> Más de 5 veces</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 23)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P25 -->
+          <div id="paso25" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">25_¿Tienes coche? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-car text-6xl mb-2"></i></div>
+            <form id="formPaso25" class="space-y-3" onsubmit="procesarPaso25(event)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiene_coche" value="si" class="w-5 h-5 accent-sky-400" required /> Si</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="tiene_coche" value="no" class="w-5 h-5 accent-sky-400" /> No</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 24)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P26 -->
+          <div id="paso26" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">26_¿Que utilizas para lavar tu coche? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-car-wash text-6xl mb-2"></i></div>
+            <form id="formPaso26" class="space-y-3" onsubmit="siguientePaso(event, 27)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="metodo_lavado_coche" value="cubeta" class="w-5 h-5 accent-sky-400" required /> Una cubeta</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="metodo_lavado_coche" value="manguera" class="w-5 h-5 accent-sky-400" /> Una manguera</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="metodo_lavado_coche" value="autolavado" class="w-5 h-5 accent-sky-400" /> Utilizas el autolavado</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 25)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P27 -->
+          <div id="paso27" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">27_¿Utilizas plantas o jardín en casa y cómo las riegas? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-plant-wilt text-6xl mb-2"></i></div>
+            <form id="formPaso27" class="space-y-3" onsubmit="siguientePaso(event, 28)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="riego_jardin" value="no_tengo" class="w-5 h-5 accent-sky-400" required /> No tengo plantas o jardín</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="riego_jardin" value="regadera" class="w-5 h-5 accent-sky-400" /> Riego con regadera o cubeta</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="riego_jardin" value="manguera" class="w-5 h-5 accent-sky-400" /> Riego con manguera por las tardes/noches</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="riego_jardin" value="manguera_sol" class="w-5 h-5 accent-sky-400" /> Riego con manguera a pleno sol</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 26)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P28 -->
+          <div id="paso28" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">28_¿Qué medio de transporte utilizas más seguido? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-bus text-6xl mb-2"></i></div>
+            <form id="formPaso28" class="space-y-3" onsubmit="siguientePaso(event, 29)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="transporte" value="caminar_bici" class="w-5 h-5 accent-sky-400" required /> Caminar o bicicleta</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="transporte" value="publico" class="w-5 h-5 accent-sky-400" /> Transporte público (autobús/metro)</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="transporte" value="auto_propio" class="w-5 h-5 accent-sky-400" /> Automóvil particular</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 27)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P29 -->
+          <div id="paso29" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">29_¿Reutilizas el agua de la lluvia o de la lavadora? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-recycle text-6xl mb-2"></i></div>
+            <form id="formPaso29" class="space-y-3" onsubmit="siguientePaso(event, 30)">
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="reutiliza_agua" value="frecuentemente" class="w-5 h-5 accent-sky-400" required /> Frecuentemente</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="reutiliza_agua" value="a_veces" class="w-5 h-5 accent-sky-400" /> A veces</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="reutiliza_agua" value="nunca" class="w-5 h-5 accent-sky-400" /> Nunca</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 28)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button></div>
+            </form>
+          </div>
+
+          <!-- P30 -->
+          <div id="paso30" class="hidden">
+            <h2 class="text-xl font-bold mb-4 text-sky-100">30_¿Reportas o reparas fugas de agua inmediatamente cuando las detectas? <span class="text-red-400">*</span></h2>
+            <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300"><i class="fa-solid fa-screwdriver-wrench text-6xl mb-2"></i></div>
+ <form id="formPaso30" class="space-y-3"onsubmit="siguientePaso(event, 31)">
+
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="repara_fugas" value="si" class="w-5 h-5 accent-sky-400" required /> Si, de inmediato</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="repara_fugas" value="tarda" class="w-5 h-5 accent-sky-400" /> Tardo un par de días</label>
+              <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer"><input type="radio" name="repara_fugas" value="no" class="w-5 h-5 accent-sky-400" /> Rara vez o nunca</label>
+              <div class="pt-4 flex justify-between"><button type="button" onclick="siguientePaso(null, 29)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button><button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-check text-xl"></i></button></div>
+            </form>
+          </div>
+         <!-- P31 -->
+<div id="paso31" class="hidden">
+  <h2 class="text-xl font-bold mb-4 text-sky-100">31_¿Cuántas horas al día utilizas tu celular? <span class="text-red-400">*</span></h2>
+  <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300">
+    <i class="fa-solid fa-mobile-screen-button text-6xl mb-2"></i>
+  </div>
+  <form id="formPaso31" class="space-y-3" onsubmit="siguientePaso(event, 32)">
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="horas_celular" value="1.5" class="w-5 h-5 accent-sky-400" required /> De 1 a 2 horas
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="horas_celular" value="3.5" class="w-5 h-5 accent-sky-400" /> De 3 a 4 horas
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="horas_celular" value="5.5" class="w-5 h-5 accent-sky-400" /> De 5 a 6 horas
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="horas_celular" value="7" class="w-5 h-5 accent-sky-400" /> Más de 6 horas
+    </label>
+    <div class="pt-4 flex justify-between">
+      <button type="button" onclick="siguientePaso(null, 30)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button>
+      <button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </form>
+</div>
+
+<!-- P32 -->
+<div id="paso32" class="hidden">
+  <h2 class="text-xl font-bold mb-4 text-sky-100">32_¿Qué aplicaciones IA utilizas con mayor frecuencia? <span class="text-red-400">*</span></h2>
+  <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300">
+    <i class="fa-solid fa-robot text-6xl mb-2"></i>
+  </div>
+  <form id="formPaso32" class="space-y-3" onsubmit="siguientePaso(event, 33)">
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="app_ia" value="chatgpt" class="w-5 h-5 accent-sky-400" required /> Chatgpt
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="app_ia" value="gemini" class="w-5 h-5 accent-sky-400" /> Gemini
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="app_ia" value="copilot" class="w-5 h-5 accent-sky-400" /> Copilot
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="app_ia" value="meta_ia" class="w-5 h-5 accent-sky-400" /> Meta IA
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="app_ia" value="ninguna" class="w-5 h-5 accent-sky-400" /> Ninguna IA
+    </label>
+    <div class="pt-4 flex justify-between">
+      <button type="button" onclick="siguientePaso(null, 31)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button>
+      <button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </form>
+</div>
+
+<!-- P33 -->
+<div id="paso33" class="hidden">
+  <h2 class="text-xl font-bold mb-4 text-sky-100">33_¿Cuántas consultas aproximadamente haces a una IA en una semana? <span class="text-red-400">*</span></h2>
+  <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300">
+    <i class="fa-solid fa-laptop-code text-6xl mb-2"></i>
+  </div>
+  <form id="formPaso33" class="space-y-3" onsubmit="siguientePaso(event, 34)">
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="consultas_ia_semana" value="3" class="w-5 h-5 accent-sky-400" required /> De 1 a 5 consultas
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="consultas_ia_semana" value="8" class="w-5 h-5 accent-sky-400" /> De 6 a 10 consultas
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="consultas_ia_semana" value="13" class="w-5 h-5 accent-sky-400" /> De 11 a 15 consultas
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="consultas_ia_semana" value="18" class="w-5 h-5 accent-sky-400" /> De 16 a 20 consultas
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="consultas_ia_semana" value="25" class="w-5 h-5 accent-sky-400" /> Más de 20 consultas
+    </label>
+    <div class="pt-4 flex justify-between">
+      <button type="button" onclick="siguientePaso(null, 32)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button>
+      <button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </form>
+</div>
+
+<!-- P34 -->
+<div id="paso34" class="hidden">
+  <h2 class="text-xl font-bold mb-4 text-sky-100">34_¿Cuánto tiempo al día utilizas redes sociales? <span class="text-red-400">*</span></h2>
+  <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300">
+    <i class="fa-solid fa-users-rectangle text-6xl mb-2"></i>
+  </div>
+  <form id="formPaso34" class="space-y-3" onsubmit="siguientePaso(event, 35)">
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="tiempo_redes" value="0.25" class="w-5 h-5 accent-sky-400" required /> Menos de 30 minutos
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="tiempo_redes" value="0.75" class="w-5 h-5 accent-sky-400" /> De 30 a 60 minutos
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="tiempo_redes" value="1.5" class="w-5 h-5 accent-sky-400" /> De 1 a 2 horas
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="tiempo_redes" value="3.5" class="w-5 h-5 accent-sky-400" /> De 3 a 4 horas
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="tiempo_redes" value="5.5" class="w-5 h-5 accent-sky-400" /> De 5 a 6 horas
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="tiempo_redes" value="7" class="w-5 h-5 accent-sky-400" /> Más de 6 horas
+    </label>
+    <div class="pt-4 flex justify-between">
+      <button type="button" onclick="siguientePaso(null, 33)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button>
+      <button type="submit" class="w-12 h-12 bg-sky-500 hover:bg-sky-400 text-white rounded-xl"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </form>
+</div>
+
+<!-- P35 -->
+<div id="paso35" class="hidden">
+  <h2 class="text-xl font-bold mb-4 text-sky-100">35_¿Qué red social consumes con mayor frecuencia? <span class="text-red-400">*</span></h2>
+  <div class="w-full h-48 rounded-2xl mb-6 bg-sky-900/40 flex flex-col items-center justify-center text-sky-300">
+    <i class="fa-solid fa-share-nodes text-6xl mb-2"></i>
+  </div>
+  <form id="formPaso35" class="space-y-3" onsubmit="calcularResultado(event)">
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="red_social_frecuente" value="facebook" class="w-5 h-5 accent-sky-400" required /> Facebook
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="red_social_frecuente" value="instagram" class="w-5 h-5 accent-sky-400" /> Instagram
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="red_social_frecuente" value="whatsapp" class="w-5 h-5 accent-sky-400" /> WhatsApp
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="red_social_frecuente" value="youtube" class="w-5 h-5 accent-sky-400" /> YouTube
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="red_social_frecuente" value="tiktok" class="w-5 h-5 accent-sky-400" /> Tiktok
+    </label>
+    <label class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+      <input type="radio" name="red_social_frecuente" value="otra" class="w-5 h-5 accent-sky-400" /> O consumes otra red social
+    </label>
+    <div class="pt-4 flex justify-between">
+      <button type="button" onclick="siguientePaso(null, 34)" class="w-12 h-12 bg-white/10 rounded-xl"><i class="fa-solid fa-chevron-left"></i></button>
+      <button type="submit" class="px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-white font-bold rounded-xl flex items-center gap-2">
+        <i class="fa-solid fa-calculator"></i> Finalizar y Calcular
+      </button>
+    </div>
+  </form>
+</div>
+
+
+          <!-- ==================== TARJETA DE RESULTADO ==================== -->
+          <div id="resultCard" class="hidden p-4 text-center space-y-4">
+            <h3 class="text-xl font-bold text-slate-100">Resultado de Tu Consumo Total</h3>
+            <div class="p-6 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl">
+              <p class="text-sm font-semibold text-slate-300">Tu huella hídrica diaria estimada es de:</p>
+              <p class="text-4xl sm:text-5xl font-extrabold text-sky-300 my-3" id="litrosTotales">0 Litros/día</p>
+              <p id="consejoResultado" class="text-sm text-slate-200 mt-2 leading-relaxed"></p>
+            </div>
+            <button onclick="reiniciarCalculadora()" class="mt-4 px-6 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-semibold transition">
+              <i class="fa-solid fa-rotate-right mr-2"></i>Volver a calcular
+            </button>
+            <!-- Debajo de tu botón "Volver a calcular" agrega este botón: -->
+<button 
+  type="button" 
+  onclick="mostrarComparacionMundial()" 
+  class="w-full mt-3 py-3 px-4 bg-sky-600/30 hover:bg-sky-600/50 text-sky-200 text-sm font-semibold rounded-xl border border-sky-400/30 transition flex items-center justify-center gap-2">
+  <i class="fa-solid fa-earth-americas"></i> ¿Quieres saber cuál es el promedio mundial?
+</button>
+
+<div id="seccionComparacion" class="hidden mt-6 p-5 bg-sky-950/60 rounded-2xl border border-sky-500/30 text-left space-y-3">
+  <h4 class="text-lg font-bold text-sky-100 flex items-center gap-2">
+    <i class="fa-solid fa-chart-column text-sky-400"></i> Comparativa con el Promedio Mundial
+  </h4>
+  
+  <p class="text-sm text-sky-200">
+    El promedio mundial de huella hídrica total es de aproximadamente <strong class="text-white">3,800 Litros / día</strong> por persona.
+  </p>
+
+  <div id="mensajeComparativa" class="p-3 rounded-xl text-sm font-medium">
+    <!-- Aquí se insertará la comparación dinámica con JavaScript -->
+  </div>
+
+  <div class="pt-2 text-xs text-sky-300/80 space-y-1">
+    <p>• <strong>Nivel sostenible recomendado:</strong> 2,500 a 3,000 L/día.</p>
+    <p>• <strong>Uso directo básico (OMS):</strong> 50 a 100 L/día.</p>
+  </div>
+</div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== APRENDE / TARJETAS ==================== -->
+    <section id="aprende" class="py-16 px-4 max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white">¿Qué es el Agua Virtual?</h2>
+        <p class="text-slate-600 dark:text-slate-400 mt-2">Haz clic en las tarjetas para descubrir más:</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="fact-card bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer shadow-sm hover:shadow-md transition" onclick="toggleFact(this)">
+          <div class="text-brand-500 text-3xl mb-3"><i class="fa-solid fa-earth-americas"></i></div>
+          <h3 class="font-bold text-lg mb-1"> ¿Qué es?</h3>
+          <p class="text-2xl font-black text-slate-700 dark:text-slate-200">Agua virtual</p>
+          <div class="fact-details hidden mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
+            Es el volumen total de agua dulce que se utiliza de manera indirecta para fabricar un producto, elaborar un alimento o prestar un servicio.
+          </div>
+        </div>
+        <div class="fact-card bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer shadow-sm hover:shadow-md transition" onclick="toggleFact(this)">
+          <div class="text-brand-500 text-3xl mb-3"><i class="fa-solid fa-hamburger"></i></div>
+          <h3 class="font-bold text-lg mb-1"> Alimentos</h3>
+          <p class="text-2xl font-black text-slate-700 dark:text-slate-200">80% y el 90%</p>
+          <div class="fact-details hidden mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
+            Representa entre el 80% y el 90% de la huella hídrica total.
+          </div>
+        </div>
+        <div class="fact-card bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer shadow-sm hover:shadow-md transition" onclick="toggleFact(this)">
+          <div class="text-brand-500 text-3xl mb-3"><i class="fa-solid fa-shirt"></i></div>
+          <h3 class="font-bold text-lg mb-1">ropa, tecnología, papel</h3>
+          <p class="text-2xl font-black text-slate-700 dark:text-slate-200">5% al 10%</p>
+          <div class="fact-details hidden mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
+            El cultivo y tratamiento del algodón requiere mucha agua, esto representa entre el 5% al 10%.
+          </div>
+        </div>
+        <div class="fact-card bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 cursor-pointer shadow-sm hover:shadow-md transition" onclick="toggleFact(this)">
+          <div class="text-brand-500 text-3xl mb-3"><i class="fa-solid fa-bottle-water"></i></div>
+          <h3 class="font-bold text-lg mb-1">Uso doméstico directo</h3>
+          <p class="text-2xl font-black text-slate-700 dark:text-slate-200"> 3% al 5%</p>
+          <div class="fact-details hidden mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 text-xs text-slate-500 dark:text-slate-400">
+            baño, lavabo, cocina, etc. Solo entre el 3% y el 5% del total
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FORMULARIO DE CONTACTO NATIVO ==================== -->
+    <section id="contacto" class="py-16 bg-slate-100 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 px-4">
+      <div class="max-w-xl mx-auto text-center">
+        <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-2">Contacto</h2>
+        <p class="text-slate-600 dark:text-slate-400 mb-8">Déjanos tus comentarios o preguntas completando el formulario a continuación:</p>
+        <form id="contactForm" class="bg-white dark:bg-slate-900 p-6 sm:p-8 rounded-2xl shadow-xl text-left space-y-4 border border-slate-200 dark:border-slate-800" onsubmit="enviarContacto(event)">
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Nombre</label>
+            <input type="text" required placeholder="Tu nombre" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Correo Electrónico</label>
+            <input type="email" required placeholder="tu@correo.com" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Mensaje</label>
+            <textarea rows="4" required placeholder="Escribe tu mensaje aquí..." class="w-full px-4 py-2.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-brand-500 outline-none transition"></textarea>
+          </div>
+          <button type="submit" class="w-full py-3 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-lg shadow-md transition">
+            Enviar Mensaje
+          </button>
+          <p id="mensajeConfirmacion" class="hidden text-center text-sm font-medium text-emerald-500 mt-2">
+            ¡Gracias! Tu mensaje ha sido enviado correctamente.
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-slate-900 text-slate-400 py-8 px-4 border-t border-slate-800 text-center text-sm">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p>© 2026 G.B - Proyecto Educativo.</p>
+      <div class="flex gap-4 text-lg">
+        <a href="#contacto" class="hover:text-white transition">Contacto</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+<script>
+  const totalPreguntasNum = 35;
+  const todosLosPasos = Array.from({length: totalPreguntasNum}, (_, i) => i + 1);
+
+  function actualizarProgreso(paso) {
+    const porcentaje = (paso / 35) * 100;
+    const elBarra = document.getElementById('barraProgreso');
+    if (elBarra) {
+      elBarra.style.width = `${porcentaje}%`;
+    }
+  }
+
+    function mostrarCalculadora() {
+      document.getElementById('vistaInicio').classList.add('hidden');
+      document.getElementById('vistaCalculadora').classList.remove('hidden');
+      reiniciarCalculadora();
+      window.scrollTo(0, 0);
+    }
+
+    function mostrarInicio() {
+      document.getElementById('vistaCalculadora').classList.add('hidden');
+      document.getElementById('vistaInicio').classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    function siguientePaso(e, paso) {
+      if (e) e.preventDefault();
+      todosLosPasos.forEach(p => {
+        const el = document.getElementById(`paso${p}`);
+        if (el) el.classList.add('hidden');
+      });
+      document.getElementById('resultCard').classList.add('hidden');
+      const pasoSiguiente = document.getElementById(`paso${paso}`);
+      if (pasoSiguiente) {
+        pasoSiguiente.classList.remove('hidden');
+        actualizarProgreso(paso);
+      }
+    }
+
+    function procesarPaso6(e) {
+      e.preventDefault();
+      const opcionLavadora = document.querySelector('input[name="tiene_lavadora"]:checked');
+      if (!opcionLavadora) return;
+      if (opcionLavadora.value === "no") {
+        siguientePaso(e, 9);
+      } else {
+        siguientePaso(e, 7);
+      }
+    }
+
+    function procesarPaso25(e) {
+      e.preventDefault();
+      const opcionCoche = document.querySelector('input[name="tiene_coche"]:checked');
+      if (!opcionCoche) return;
+      if (opcionCoche.value === "no") {
+        siguientePaso(e, 27);
+      } else {
+        siguientePaso(e, 26);
+      }
+    }
+
+    function calcularResultado(e) {
+      if (e) e.preventDefault();
+
+      const val = (name) => {
+        const el = document.querySelector(`input[name="${name}"]:checked`);
+        return el ? parseFloat(el.value) : 0;
+      };
+
+      const strVal = (name) => {
+        const el = document.querySelector(`input[name="${name}"]:checked`);
+        return el ? el.value : '';
+      };
+
+      // Directo (Ducha, grifo, dientes, trastes, lavadora, coche, jardín)
+      const litrosDucha = val('tiempo_baño') * 12 * val('frecuencia_baño');
+      const litrosGrifoManos = (val('tiempo_grifo') / 60) * 6 * val('lavado_manos');
+      
+      let dientesL = 2;
+      if (strVal('lavado_dientes') === 'abierta') dientesL = 15;
+
+      let lavadoraL = 0;
+      if (strVal('tiene_lavadora') === 'si') {
+        lavadoraL = (val('cargas_ropa') * 50) / 7;
+      }
+
+      let cocheL = 0;
+      if (strVal('tiene_coche') === 'si') {
+        const m = strVal('metodo_lavado_coche');
+        if (m === 'cubeta') cocheL = 30 / 7;
+        else if (m === 'manguera') cocheL = 200 / 7;
+        else if (m === 'autolavado') cocheL = 150 / 7;
+      }
+
+      let jardinL = 0;
+      const rj = strVal('riego_jardin');
+      if (rj === 'regadera') jardinL = 15;
+      else if (rj === 'manguera') jardinL = 50;
+      else if (rj === 'manguera_sol') jardinL = 90;
+
+      // Agua Virtual (Pollo, Pescado, Leche, Res, Frutas, Verduras, Legumbres, Huevos, Bebidas, Ropa, Comida Rápida)
+      const polloL = (val('pollo_mes') * 4300) / 30;
+      const pescadoL = (val('pescado_mes') * 4000) / 30;
+      const lecheL = (val('litros_leche') * 1000) / 7;
+      const resL = (val('carne_res_mes') * 15400) / 30;
+      const frutaL = (val('dias_frutas') * val('porciones_fruta') * 300) / 7;
+      const verduraL = (val('dias_verduras') * val('porciones_verduras') * 300) / 7;
+      const legumbresL = (val('dias_legumbres') * val('porciones_legumbres') * 4000) / 7;
+      const huevosL = (val('frecuencia_huevos') * 200) / 7;
+      const bebidasL = val('bebidas_embotelladas') * 3;
+      const prendasL = (val('prendas_nuevas') * 2700) / 30;
+      const comidaRapidaL = (val('comida_rapida') * 2400) / 7;
+
+      const totalLitros = Math.round(
+        litrosDucha + litrosGrifoManos + dientesL + lavadoraL + cocheL + jardinL +
+        polloL + pescadoL + lecheL + resL + frutaL + verduraL + legumbresL + huevosL +
+        bebidasL + prendasL + comidaRapidaL
+      );
+
+      todosLosPasos.forEach(p => {
+        const el = document.getElementById(`paso${p}`);
+        if (el) el.classList.add('hidden');
+      });
+      
+      const resultCard = document.getElementById('resultCard');
+      document.getElementById('litrosTotales').textContent = `${totalLitros} Litros / día`;
+
+      if (totalLitros > 600) {
+        document.getElementById('consejoResultado').textContent = "Tu huella hídrica total es alta debido al impacto del agua virtual en alimentos e insumos. Intenta reducir tiempos en grifos y moderar las carnes rojas y productos embotellados.";
+      } else {
+        document.getElementById('consejoResultado').textContent = "¡Excelente trabajo! Demuestras hábitos conscientes de consumo directo e indirecto del agua.";
+      }
+
+      resultCard.classList.remove('hidden');
+    }
+
+    function reiniciarCalculadora() {
+      todosLosPasos.forEach(p => {
+        const form = document.getElementById(`formPaso${p}`);
+        if (form) form.reset();
+      });
+      siguientePaso(null, 1);
+    }
+
+    function enviarContacto(e) {
+      e.preventDefault();
+      const msg = document.getElementById('mensajeConfirmacion');
+      msg.classList.remove('hidden');
+      document.getElementById('contactForm').reset();
+      setTimeout(() => msg.classList.add('hidden'), 4000);
+    }
+
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const htmlElement = document.documentElement;
+
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      htmlElement.classList.add('dark');
+    } else {
+      htmlElement.classList.remove('dark');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      htmlElement.classList.toggle('dark');
+      localStorage.theme = htmlElement.classList.contains('dark') ? 'dark' : 'light';
+    });
+
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    function toggleFact(cardElement) {
+      cardElement.querySelector('.fact-details').classList.toggle('hidden');
+    }
+    function mostrarComparacionMundial() {
+  const seccion = document.getElementById('seccionComparacion');
+  const mensajeDiv = document.getElementById('mensajeComparativa');
+  
+  if (seccion) {
+    seccion.classList.remove('hidden');
+  }
+
+  const promedioMundial = 3800;
+  
+  const textoTotal = document.getElementById('litrosTotales')?.innerText || "0";
+  const huellaUsuario = parseFloat(textoTotal.replace(/[^0-9.]/g, '')) || 0;
+
+  if (huellaUsuario > 0) {
+    if (huellaUsuario > promedioMundial) {
+      const diferencia = Math.round(huellaUsuario - promedioMundial).toLocaleString();
+      mensajeDiv.className = "p-3 rounded-xl text-xs font-medium bg-amber-500/20 text-amber-200 border border-amber-500/30";
+      mensajeDiv.innerHTML = `⚠️ Tu consumo está <strong>${diferencia} Litros/día por encima</strong> del promedio mundial. ¡Revisa la sección de agua virtual para reducir tu impacto!`;
+    } else {
+      const diferencia = Math.round(promedioMundial - huellaUsuario).toLocaleString();
+      mensajeDiv.className = "p-3 rounded-xl text-xs font-medium bg-emerald-500/20 text-emerald-200 border border-emerald-500/30";
+      mensajeDiv.innerHTML = `🎉 ¡Excelente! Tu consumo está <strong>${diferencia} Litros/día por debajo</strong> del promedio mundial.`;
+    }
+  }
+}
+  </script>
+</body>
+</html>
